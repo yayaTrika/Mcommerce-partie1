@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Api( description="API pour es opérations CRUD sur les produits.")
@@ -104,5 +108,20 @@ public class ProductController {
     }
 
 
+    //Calcule la marge de chaque produit
+    @GetMapping(value = "/AdminProduits")
+    @ApiOperation(value = "Calcule la marge de chaque de produit")
+    public ResponseEntity<HashMap<Product, Integer>> calculeMargeProduit(){
+
+        List<Product> productList = productDao.findAll();
+        HashMap<Product, Integer> map = new HashMap<>();
+
+        for (Product p: productList) {
+            int marge = p.getPrix() - p.getPrixAchat();
+            map.put(p, marge);
+        }
+
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
+    }
 
 }
