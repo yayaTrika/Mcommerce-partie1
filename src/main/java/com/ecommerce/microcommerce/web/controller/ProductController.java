@@ -124,4 +124,14 @@ public class ProductController {
         return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
 
+    //list de produit trie par ordre alphabetique
+    @GetMapping(value = "/ProduitsTrie")
+    @ApiOperation(value = "Retourne la liste des produits tries par ordre alphabetique")
+    public ResponseEntity<List<Product>> trierProduitsParOrdreAlphabetique(){
+        
+        List<Product> productsTrie = productDao.findAllByOrderByNomAsc();
+        return new ResponseEntity<>(productsTrie, HttpStatus.OK);
+
+    }
+
 }
